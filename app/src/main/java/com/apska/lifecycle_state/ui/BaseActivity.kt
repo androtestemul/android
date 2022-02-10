@@ -6,10 +6,12 @@ import androidx.viewbinding.ViewBinding
 
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
 
-    lateinit var binding: VB
+    protected lateinit var binding: VB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        lifecycle.addObserver(MyLifecycleObserver(getLifecycleOserverTag()))
 
         binding = setBinding()
 
@@ -17,5 +19,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
     }
 
     abstract fun setBinding(): VB
+
+    abstract fun getLifecycleOserverTag(): String
 
 }

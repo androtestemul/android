@@ -3,7 +3,6 @@ package com.apska.lifecycle_state.ui.screens
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import com.apska.lifecycle_state.R
 import com.apska.lifecycle_state.databinding.ActivityMainBinding
 import com.apska.lifecycle_state.ui.BaseActivity
@@ -21,15 +20,12 @@ class PowActivity : BaseActivity<ActivityMainBinding>() {
         fun getIntentExtraCounter(context: Context, counter: Int): Intent {
             return Intent(context, PowActivity::class.java).apply {
                 putExtra(EXTRA_COUNTER, counter)
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        Log.d(TAG, "onCreate: ${intent.getIntExtra(EXTRA_COUNTER, -1)}")
 
         counter = intent.getIntExtra(EXTRA_COUNTER, 0)
 
@@ -52,4 +48,6 @@ class PowActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun setBinding() = ActivityMainBinding.inflate(layoutInflater)
+
+    override fun getLifecycleOserverTag() = TAG
 }

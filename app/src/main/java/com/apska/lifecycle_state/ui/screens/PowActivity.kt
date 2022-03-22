@@ -9,12 +9,10 @@ import com.apska.lifecycle_state.ui.BaseActivity
 
 class PowActivity : BaseActivity<ActivityMainBinding>() {
 
-    private val TAG = "SecondScreen"
-    private val STATE_COUNTER = "StateCounter"
-
-    private var counter = 0
-
     companion object {
+        private const val TAG = "SecondScreen"
+        private const val STATE_COUNTER = "StateCounter"
+        private const val STATE_CHANGE_CONFIG_COUNTER = "StateChangeConfigCounter"
         private const val EXTRA_COUNTER = "ExtraCounter"
 
         fun getIntentExtraCounter(context: Context, counter: Int): Intent {
@@ -23,6 +21,9 @@ class PowActivity : BaseActivity<ActivityMainBinding>() {
             }
         }
     }
+
+    private var changeConfigCounter = 0
+    private var counter = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +46,20 @@ class PowActivity : BaseActivity<ActivityMainBinding>() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt(STATE_COUNTER, counter)
+        outState.putInt(STATE_CHANGE_CONFIG_COUNTER, changeConfigCounter)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        //была смена конфигурации
+        changeConfigCounter = savedInstanceState.getInt(STATE_CHANGE_CONFIG_COUNTER)
+
+        changeConfigCounter += 1
+
+        //Если конфигурация сменилась (в расчет берем только поворот экрана) нечетное
+        //количество раз, то значит экран первой активити тоже изменился и пересоздастся
+        CounterActivity.isIncreaseEnabled = changeConfigCounter%2 != 1
     }
 
     override fun setBinding() = ActivityMainBinding.inflate(layoutInflater)
